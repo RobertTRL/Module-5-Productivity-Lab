@@ -184,7 +184,20 @@ class Notes(Resource):
         return NoteSchema().dump(specific_note), 200
 
     def delete(self, id):
-        pass    
+        user_id = int(get_jwt_identity())
+                
+        specific_note = Note.query.filter(
+                Note.user_id == user_id,
+                Note.id == id
+                ).first() 
+
+        if not specific_note:
+            return {"error": "Item not found"}, 404 
+
+        db.session.delete(specific_note)
+        db.session.commit()
+
+        return NoteSchema().dump(specific_note), 200 
 
 api.add_resource(Login, '/login', endpoints='login')
 api.add_resource(Signup, '/signup', endpoints='signup')
