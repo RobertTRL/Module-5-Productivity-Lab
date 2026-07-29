@@ -24,5 +24,9 @@ class User(db.Model):
     username = db.Column(db.String, nullable=False, unique=True)
     _password_hash = db.Column(db.String, nullable=False)
 
+    @hybrid_property
+    def password_hash(self):
+        raise AttributeError("You cannot access this attribute directly!")
+
 class Notes(db.Model):
     pass
