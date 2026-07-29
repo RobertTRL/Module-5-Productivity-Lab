@@ -28,5 +28,9 @@ class User(db.Model):
     def password_hash(self):
         raise AttributeError("You cannot access this attribute directly!")
 
+    @password_hash.setter
+    def password_hash(self, password):
+        password_hash = bcrypt.generate_password_hash(password.encode('utf-8'))
+        self._password_hash = password_hash
 class Notes(db.Model):
     pass
