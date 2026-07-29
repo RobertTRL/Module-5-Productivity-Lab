@@ -134,8 +134,30 @@ class Notes(Resource):
         return NoteSchema().dump(new_note), 201
         
     def put(self, id):
-        pass
+        user_id = int(get_jwt_identity())
 
+        specific_note = Note.query.filter(
+                Note.user_id == user_id,
+                Note.id == id
+            ).first()
+
+        data = request.get_json()
+
+        if not data:
+            return {"error": "Invalid or missing JSON body"}, 400
+
+        try:
+            validated = NoteSchema().load(data)
+        except ValidationError as err:
+            return {"error_description": f"{err.messages}"}, 422
+
+        specific_note.title = validated['title']
+        specific_note.content = validated.get('content', None)
+
+        db.session.commit()
+
+        return NoteSchema().dump(specific_note), 200
+        
     def patch(self, id):
         pass
 
