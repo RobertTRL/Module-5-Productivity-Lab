@@ -66,15 +66,16 @@ class Signup(Resource):
 
         new_user = User(username=username)
         new_user.password_hash = password
-        token = create_access_token(identity=str(new_user.id))
 
         db.session.add(new_user)
         db.session.commit() 
 
+        token = create_access_token(identity=str(new_user.id))
+
         return make_response(jsonify(token=token, user=UserSchema().dump(new_user)), 200)   
 
 class Identity(Resource):
-    @jwt_required
+    @jwt_required()
     def get(self):
         user = User.query.get(get_jwt_identity())
 
