@@ -60,4 +60,9 @@ class Note(db.Model):
     user = db.relationship('User', back_populates='notes')
 
 class NoteSchema(Schema):
-    pass
+    id = fields.Integer(dump_only=True)
+    title = fields.String(required=True)
+    content = fields.String()
+    created_at = fields.Date(required=True)
+
+    user = fields.Nested(lambda : UserSchema(exclude=('notes',)))
