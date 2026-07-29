@@ -3,3 +3,9 @@ from sqlalchemy.ext.hybrid import hybrid_property
 from marshmallow import Schema, fields
 
 from config import db, bcrypt
+
+class User(db.Model):
+    pass
+
+class Notes(db.Model):
+    pass
