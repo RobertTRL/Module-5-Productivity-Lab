@@ -57,7 +57,7 @@ class Signup(Resource):
             return {"error": "Enter a password"}, 400
 
         if password != password_confirmation:
-            return {"error": "Password and password confirmation do not match"}, 404
+            return {"error": "Password and password confirmation do not match"}, 400
 
         try:
             new_user = User(username=username)
@@ -208,10 +208,10 @@ class Notes(Resource):
 
         return {}, 204 
 
-api.add_resource(Login, '/login', endpoints='login')
-api.add_resource(Signup, '/signup', endpoints='signup')
-api.add_resource(Identity, '/me', endpoints='me')
-api.add_resource(Notes, '/notes', '/notes/<int:id>', endpoints='notes')
+api.add_resource(Login, '/login', endpoint='login')
+api.add_resource(Signup, '/signup', endpoint='signup')
+api.add_resource(Identity, '/me', endpoint='me')
+api.add_resource(Notes, '/notes', '/notes/<int:id>', endpoint='notes')
 
 if __name__ == '__main__':
     app.run(port=5555, debug=True)
