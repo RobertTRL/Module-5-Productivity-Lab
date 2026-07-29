@@ -72,7 +72,7 @@ class Signup(Resource):
 
         token = create_access_token(identity=str(new_user.id))
 
-        return make_response(jsonify(token=token, user=UserSchema().dump(new_user)), 200)   
+        return make_response(jsonify(token=token, user=UserSchema().dump(new_user)), 201)   
 
 class Identity(Resource):
     @jwt_required()
