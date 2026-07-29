@@ -151,7 +151,7 @@ class Notes(Resource):
             return {"error": "Invalid or missing JSON body"}, 400
 
         try:
-            validated = NoteSchema().load(data)
+            validated = NoteSchema().load(data, partial=True)
         except ValidationError as err:
             return {"error_description": f"{err.messages}"}, 422
 
