@@ -141,6 +141,9 @@ class Notes(Resource):
                 Note.id == id
             ).first()
 
+        if not specific_note:
+            return {"error": "Item not found"}, 404
+        
         data = request.get_json()
 
         if not data:
@@ -165,6 +168,9 @@ class Notes(Resource):
                 Note.user_id == user_id,
                 Note.id == id
                ).first()
+
+        if not specific_note:
+            return {"error": "Item not found"}, 404
         
         data = request.get_json()
         
