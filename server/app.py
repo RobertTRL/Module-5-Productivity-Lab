@@ -203,7 +203,7 @@ class Notes(Resource):
         db.session.delete(specific_note)
         db.session.commit()
 
-        return NoteSchema().dump(specific_note), 200 
+        return {}, 204 
 
 api.add_resource(Login, '/login', endpoints='login')
 api.add_resource(Signup, '/signup', endpoints='signup')
