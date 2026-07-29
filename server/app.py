@@ -91,11 +91,29 @@ class Notes(Resource):
             return {'error': 'Unauthorized'}, 401
         
         if id is None:
-            notes = Note.query.filter(Note.user_id == int(user_id)).all()
-            return NoteSchema().dump(notes, many=True), 200
+            page = request.args.get('page', 1, type=int)
+            per_page = request.args.get('per_page', 5, type=int)
 
-        specific_note = Note.query.filter(Note.user_id == int(user_id))[int(id)]
+            pagination = Note.query.filter(Note.user_id == int(user_id)).order_by(Note.id).paginate(page=page, per_page=per_page, error_out=False)
+            notes = pagination.items
 
+            return {
+                "page": page,
+                "per_page": per_page,
+                "total": pagination.total,
+                "total_pages": pagination.pages,
+                "items": [NoteSchema().dump(note) for note in notes]
+
+            }, 200
+
+        specific_note = Note.query.filter(
+                Note.user_id == int(user_id),
+                Note.id == id
+            ).first()
+
+        if not specific_note:
+            return {"error": "Item not found"}, 404
+        
         return NoteSchema().dump(specific_note), 200
 
     def post(self):
