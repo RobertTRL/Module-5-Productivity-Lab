@@ -82,9 +82,13 @@ class Identity(Resource):
 
         return UserSchema().dump(user), 200
 
-api.add_resource(Login, '/login', endpoint='login')
-api.add_resource(Signup, '/signup', endpoint='signup')
-api.add_resource(Identity, '/me', endpoint='me')
+class Notes(Resource):
+    pass
+
+api.add_resource(Login, '/login', endpoints='login')
+api.add_resource(Signup, '/signup', endpoints='signup')
+api.add_resource(Identity, '/me', endpoints='me')
+api.add_resource(Notes, '/notes', '/notes/<int:id>', endpoints='notes')
 
 if __name__ == '__main__':
     app.run(port=5555, debug=True)
