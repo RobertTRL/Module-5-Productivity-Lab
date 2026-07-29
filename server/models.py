@@ -1,0 +1,49 @@
+from sqlalchemy.orm import validates
+from sqlalchemy.ext.hybrid import hybrid_property
+from marshmallow import Schema, fields
+
+from config import db, bcrypt
+
+"""
+
+User model   
+    -> id integer
+    -> username string unique not null
+    -> password_hash string not null
+
+Note model 
+    -> id integer
+    -> title string not null
+    -> content string
+    -> user_id integer not null
+    -> created_at date not null
+
+"""
+
+class User(db.Model):
+    __tablename__ = 'users'
+
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String, nullable=False, unique=True)
+    _password_hash = db.Column(db.String, nullable=False)
+
+    @hybrid_property
+    def password_hash(self):
+        raise AttributeError("You cannot access this attribute directly!")
+
+    @password_hash.setter
+    def password_hash(self, password):
+        password_hash = bcrypt.generate_password_hash(password.encode('utf-8'))
+        self._password_hash = password_hash
+
+    def authenticate(self, password):
+        return bcrypt.check_password_hash(self._password_hash, password.encode('utf-8'))
+    
+class Note(db.Model):
+    __tablename__ = 'notes'
+
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String, nullable=False)
+    content = db.Column(db.String)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    created_at = db.Column(db.Date, nullable=False)
