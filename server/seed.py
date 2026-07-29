@@ -2,7 +2,7 @@ from random import choice
  
 from faker import Faker
  
-from app import app
+from config import app
 from models import db, User, Note
  
 fake = Faker()
