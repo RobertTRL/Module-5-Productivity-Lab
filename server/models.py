@@ -20,7 +20,9 @@ Notes model
 
 """
 class User(db.Model):
-    pass
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String, nullable=False, unique=True)
+    _password_hash = db.Column(db.String, nullable=False)
 
 class Notes(db.Model):
     pass
