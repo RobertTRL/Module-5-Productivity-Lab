@@ -85,10 +85,18 @@ class Identity(Resource):
 class Notes(Resource):
     @jwt_required()
     def get(self, id=None):
+        user_id = get_jwt_identity()
+        
+        if not user_id:
+            return {'error': 'Unauthorized'}, 401
+        
         if id is None:
-            pass
+            notes = Note.query.filter(Note.user_id == int(user_id)).all()
+            return NoteSchema().dump(notes, many=True), 200
 
-        pass
+        specific_note = Note.query.filter(Note.user_id == int(user_id))[int(id)]
+
+        return NoteSchema().dump(specific_note), 200
 
     def post(self):
         pass
