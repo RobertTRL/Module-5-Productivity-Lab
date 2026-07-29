@@ -59,20 +59,18 @@ class Signup(Resource):
             return {"error": "Password and password confirmation do not match"}, 404
 
         try:
-            UserSchema().load({"username": username})
+            new_user = User(username=username)
+            
+        except ValueError as err:
+            return {"error": str(err)}, 422
 
-        except ValidationError as err:
-            return jsonify({"error_description": f"{err.messages}"}), 422
-
-        new_user = User(username=username)
         new_user.password_hash = password
 
         db.session.add(new_user)
-        db.session.commit() 
+        db.session.commit()
 
         token = create_access_token(identity=str(new_user.id))
-
-        return make_response(jsonify(token=token, user=UserSchema().dump(new_user)), 201)   
+        return make_response(jsonify(token=token, user=UserSchema().dump(new_user)), 201)  
 
 class Identity(Resource):
     @jwt_required()
