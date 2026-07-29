@@ -2,6 +2,7 @@
 A simple Flask + SQLAlchemy REST API for user authentication and personal note-taking, secured with JWTs so each user can only see and manage their own notes.
 
 ## Schema
+
 ![Database Schema](./Schema.png)
 
 A `User` has a one-to-many relationship with `Note` — each note belongs to exactly one user, and a user can have many notes.
