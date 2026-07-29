@@ -27,10 +27,10 @@ class Login(Resource):
         username, password = data.get('username', None), data.get('password', None)
 
         if username is None:
-            return {"error": "Enter a username"}, 404
+            return {"error": "Enter a username"}, 400
                 
         if password is None:
-            return {"error": "Enter a password"}, 404
+            return {"error": "Enter a password"}, 400
 
         user = User.query.filter(User.username == username).first()
 
@@ -50,10 +50,10 @@ class Signup(Resource):
         username, password, password_confirmation = data.get('username', None), data.get('password', None), data.get('password_confirmation', None)
         
         if username is None:
-            return {"error": "Enter a username"}, 404
+            return {"error": "Enter a username"}, 400
         
         if password is None or password_confirmation is None:
-            return {"error": "Enter a password"}, 404
+            return {"error": "Enter a password"}, 400
 
         if password != password_confirmation:
             return {"error": "Password and password confirmation do not match"}, 404
