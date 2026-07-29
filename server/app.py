@@ -1,7 +1,7 @@
 from flask import request, jsonify, make_response
 from flask_restful import Resource
 from marshmallow import ValidationError
-from config import app, db, api, jwt
+from config import app, db, api
 from flask_jwt_extended import create_access_token, get_jwt_identity, jwt_required
 from models import User, Note, UserSchema, NoteSchema
 from datetime import date
