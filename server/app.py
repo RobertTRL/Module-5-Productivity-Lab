@@ -83,7 +83,24 @@ class Identity(Resource):
         return UserSchema().dump(user), 200
 
 class Notes(Resource):
-    pass
+    @jwt_required()
+    def get(self, id=None):
+        if id is None:
+            pass
+
+        pass
+
+    def post(self):
+        pass
+
+    def put(self, id):
+        pass
+
+    def patch(self, id):
+        pass
+
+    def delete(self, id):
+        pass    
 
 api.add_resource(Login, '/login', endpoints='login')
 api.add_resource(Signup, '/signup', endpoints='signup')
