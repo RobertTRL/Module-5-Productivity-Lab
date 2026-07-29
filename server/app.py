@@ -102,7 +102,7 @@ class Notes(Resource):
                 "per_page": per_page,
                 "total": pagination.total,
                 "total_pages": pagination.pages,
-                "items": [NoteSchema().dump(note) for note in notes]
+                "items": NoteSchema().dump(notes, many=True)
 
             }, 200
 
