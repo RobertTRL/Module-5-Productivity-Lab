@@ -112,21 +112,21 @@ class Notes(Resource):
 
     @jwt_required()
     def post(self):
-        user_id = get_jwt_identity()
+        user_id = int(get_jwt_identity())
 
         data = request.get_json()
-        title, content = data('title', None), data.get('content', None)
+        title, content = data.get('title', None), data.get('content', None)
 
         if title is None:
             return {"error": "Enter a title"}, 400
 
         try:
-            NoteSchema().load({"title": f"{title}", "content": f"{content}", "created_at": f"{date.today()}"})
+            validated = NoteSchema().load({"title": title, "content": content, "created_at": date.today()})
 
         except ValidationError as err:
             return {"error_description": f"{err.messages}"}, 422
 
-        new_note = Note(title=title, content=content, created_at=date.today(), user_id=user_id)
+        new_note = Note(**validated, user_id=user_id)
 
         db.session.add(new_note)
         db.session.commit()
