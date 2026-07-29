@@ -42,7 +42,11 @@ class User(db.Model):
         return bcrypt.check_password_hash(self._password_hash, password.encode('utf-8'))
 
 class UserSchema(Schema):
-    pass
+    id = fields.Integer(dump_only=True)
+    username = fields.String(required=True)
+    password_hash = fields.String(required=True)
+
+    notes = fields.List(fields.Nested(lambda : NoteSchema, exclude=('users',)), dump_only=True)
 
 class Note(db.Model):
     __tablename__ = 'notes'
