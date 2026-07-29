@@ -40,7 +40,10 @@ class User(db.Model):
 
     def authenticate(self, password):
         return bcrypt.check_password_hash(self._password_hash, password.encode('utf-8'))
-    
+
+class UserSchema(Schema):
+    pass
+
 class Note(db.Model):
     __tablename__ = 'notes'
 
@@ -51,3 +54,6 @@ class Note(db.Model):
     created_at = db.Column(db.Date, nullable=False)
 
     user = db.relationship('User', back_populates='notes')
+
+class NoteSchema(Schema):
+    pass
