@@ -13,12 +13,13 @@ User model
 
 Notes model 
     -> id integer
-    ->  title string not null
+    -> title string not null
     -> content string
     -> user_id integer not null
     -> created_at date not null
 
 """
+
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String, nullable=False, unique=True)
@@ -37,4 +38,8 @@ class User(db.Model):
         return bcrypt.check_password_hash(self._password_hash, password.encode('utf-8'))
     
 class Notes(db.Model):
-    pass
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String, nullable=False)
+    content = db.Column(db.String)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    created_at = db.Column(db.Date, nullable=False)
