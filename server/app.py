@@ -77,7 +77,7 @@ class Signup(Resource):
 class Identity(Resource):
     @jwt_required()
     def get(self):
-        user = User.query.get(get_jwt_identity())
+        user = User.query.get(int(get_jwt_identity()))
 
         if not user:
             return {'error': 'Unauthorized'}, 401
