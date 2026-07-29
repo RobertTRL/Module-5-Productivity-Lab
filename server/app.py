@@ -76,20 +76,13 @@ class Identity(Resource):
     @jwt_required()
     def get(self):
         user = User.query.get(int(get_jwt_identity()))
-
-        if not user:
-            return {'error': 'Unauthorized'}, 401
-
         return UserSchema().dump(user), 200
 
 class Notes(Resource):
     @jwt_required()
     def get(self, id=None):
         user_id = get_jwt_identity()
-        
-        if not user_id:
-            return {'error': 'Unauthorized'}, 401
-        
+       
         if id is None:
             page = request.args.get('page', 1, type=int)
             per_page = request.args.get('per_page', 5, type=int)
