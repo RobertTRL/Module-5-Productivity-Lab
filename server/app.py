@@ -22,8 +22,27 @@ Other endpoints(not tested):
 """
 
 class Login(Resource):
-    pass
+    def post(self):
+        username, password = request.get('username', None), request.get('password', None)
 
+        if username is None:
+            return {"error": "Enter a username"}, 404
+                
+        if password is None:
+            return {"error": "Enter a password"}, 404
+
+        user = User.query.filter(User.username == username).first()
+
+        if not user:
+            return {'error': 'Unauthorized'}, 401
+
+        if not user.authenticate(password):
+            return {'error': 'Unauthorized'}, 401
+
+        token = create_access_token(identity=str(user.id))
+
+        return make_response(jsonify(token=token, user=UserSchema().dump(user)), 200)
+        
 class Signup(Resource):
     def post(self):
         username, password, password_confirmation = request.get('username', None), request.get('password', None), request.get('password_confirmation', None)
