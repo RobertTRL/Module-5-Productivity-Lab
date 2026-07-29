@@ -1,7 +1,8 @@
-from flask import request
+from flask import request, jsonify, make_response
 from flask_restful import Resource
-
-from config import app, db, api
+from marshmallow import ValidationError
+from config import app, db, api, jwt
+from flask_jwt_extended import create_access_token, get_jwt_identity, verify_jwt_in_request
 from models import User, Note, UserSchema, NoteSchema
 
 """
@@ -24,7 +25,32 @@ class Login(Resource):
     pass
 
 class Signup(Resource):
-    pass
+    def post(self):
+        username, password, password_confirmation = request.get('username', None), request.get('password', None), request.get('password_confirmation', None)
+        
+        if username is None:
+            return {"error": "Enter a username"}, 404
+        
+        if password or password_confirmation is None:
+            return {"error": "Enter a password"}, 404
+
+        if password != password_confirmation:
+            return {"error": "Password and password confirmation do not match"}, 404
+
+        try:
+            UserSchema().load({"username": username})
+
+        except ValidationError as err:
+            return jsonify({"error_description": f"{err.messages}"}), 400
+
+        new_user = User(username=username)
+        new_user.password_hash = password
+        token = create_access_token(identity=str(new_user.id))
+
+        db.session.add()
+        db.session.commit() 
+
+        return make_response(jsonify(token=token, user=UserSchema().dump(new_user)), 200)   
 
 class Identity(Resource):
     pass
