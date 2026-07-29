@@ -53,9 +53,9 @@ class User(db.Model):
 class UserSchema(Schema):
     id = fields.Integer(dump_only=True)
     username = fields.String(required=True)
-    password_hash = fields.String(required=True)
+    password_hash = fields.String(required=True, load_only=True)
 
-    notes = fields.List(fields.Nested(lambda : NoteSchema, exclude=('users',)), dump_only=True)
+    notes = fields.List(fields.Nested(lambda : NoteSchema, exclude=('user',)), dump_only=True)
 
 class Note(db.Model):
     __tablename__ = 'notes'
