@@ -52,7 +52,7 @@ class Signup(Resource):
         if username is None:
             return {"error": "Enter a username"}, 404
         
-        if password or password_confirmation is None:
+        if password is None or password_confirmation is None:
             return {"error": "Enter a password"}, 404
 
         if password != password_confirmation:
@@ -62,7 +62,7 @@ class Signup(Resource):
             UserSchema().load({"username": username})
 
         except ValidationError as err:
-            return jsonify({"error_description": f"{err.messages}"}), 400
+            return jsonify({"error_description": f"{err.messages}"}), 422
 
         new_user = User(username=username)
         new_user.password_hash = password
