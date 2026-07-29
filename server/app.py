@@ -82,13 +82,13 @@ class Identity(Resource):
 class Notes(Resource):
     @jwt_required()
     def get(self, id=None):
-        user_id = get_jwt_identity()
+        user_id = int(get_jwt_identity())
        
         if id is None:
             page = request.args.get('page', 1, type=int)
             per_page = request.args.get('per_page', 5, type=int)
 
-            pagination = Note.query.filter(Note.user_id == int(user_id)).order_by(Note.id).paginate(page=page, per_page=per_page, error_out=False)
+            pagination = Note.query.filter(Note.user_id == user_id).order_by(Note.id).paginate(page=page, per_page=per_page, error_out=False)
             notes = pagination.items
 
             return {
@@ -101,7 +101,7 @@ class Notes(Resource):
             }, 200
 
         specific_note = Note.query.filter(
-                Note.user_id == int(user_id),
+                Note.user_id == user_id,
                 Note.id == id
             ).first()
 
@@ -131,7 +131,7 @@ class Notes(Resource):
         db.session.add(new_note)
         db.session.commit()
 
-        return NoteSchema().dump(new_note), 200
+        return NoteSchema().dump(new_note), 201
         
     def put(self, id):
         pass
