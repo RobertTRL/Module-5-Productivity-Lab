@@ -27,6 +27,8 @@ class User(db.Model):
     username = db.Column(db.String, nullable=False, unique=True)
     _password_hash = db.Column(db.String, nullable=False)
 
+    notes = db.relationship('Note', back_populates='user')
+
     @hybrid_property
     def password_hash(self):
         raise AttributeError("You cannot access this attribute directly!")
@@ -47,3 +49,5 @@ class Note(db.Model):
     content = db.Column(db.String)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     created_at = db.Column(db.Date, nullable=False)
+
+    user = db.relationship('User', back_populates='notes')
