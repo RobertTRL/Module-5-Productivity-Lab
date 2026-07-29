@@ -2,7 +2,7 @@ from flask import request, jsonify, make_response
 from flask_restful import Resource
 from marshmallow import ValidationError
 from config import app, db, api, jwt
-from flask_jwt_extended import create_access_token, get_jwt_identity, verify_jwt_in_request
+from flask_jwt_extended import create_access_token, get_jwt_identity, jwt_required
 from models import User, Note, UserSchema, NoteSchema
 
 """
@@ -72,7 +72,14 @@ class Signup(Resource):
         return make_response(jsonify(token=token, user=UserSchema().dump(new_user)), 200)   
 
 class Identity(Resource):
-    pass
+    @jwt_required
+    def get(self):
+        user = User.query.get(get_jwt_identity())
+
+        if not user:
+            return {'error': 'Unauthorized'}, 401
+
+        return UserSchema().dump(user), 200
 
 api.add_resource(Login, '/login', endpoint='login')
 api.add_resource(Signup, '/signup', endpoint='signup')
