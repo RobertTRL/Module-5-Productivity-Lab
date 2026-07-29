@@ -4,6 +4,7 @@ from marshmallow import ValidationError
 from config import app, db, api, jwt
 from flask_jwt_extended import create_access_token, get_jwt_identity, jwt_required
 from models import User, Note, UserSchema, NoteSchema
+from datetime import date
 
 """
 Tested endpoints:
@@ -109,9 +110,29 @@ class Notes(Resource):
         
         return NoteSchema().dump(specific_note), 200
 
+    @jwt_required
     def post(self):
-        pass
+        user_id = get_jwt_identity()
 
+        data = request.get_json()
+        title, content = data('title', None), data.get('content', None)
+
+        if title is None:
+            return {"error": "Enter a title"}, 400
+
+        try:
+            NoteSchema().load({"title": f"{title}", "content": f"{content}", "created_at": f"{date.today()}"})
+
+        except ValidationError as err:
+            return {"error_description": f"{err.messages}"}, 422
+
+        new_note = Note(title=title, content=content, created_at=date.today(), user_id=user_id)
+
+        db.session.add(new_note)
+        db.session.commit()
+
+        return NoteSchema().dump(new_note), 200
+        
     def put(self, id):
         pass
 
