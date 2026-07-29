@@ -17,8 +17,21 @@ Other endpoints(not tested):
     -> PUT /notes/<int:id>
     -> PATCH /notes/<int:id>
     -> DELETE /notes/<int:id>
-    
+
 """
+
+class Login(Resource):
+    pass
+
+class Signup(Resource):
+    pass
+
+class Identity(Resource):
+    pass
+
+api.add_resource(Login, '/login', endpoint='login')
+api.add_resource(Signup, '/signup', endpoint='signup')
+api.add_resource(Identity, '/me', endpoint='me')
 
 if __name__ == '__main__':
     app.run(port=5555, debug=True)
