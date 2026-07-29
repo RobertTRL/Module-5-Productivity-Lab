@@ -23,7 +23,8 @@ Other endpoints(not tested):
 
 class Login(Resource):
     def post(self):
-        username, password = request.get('username', None), request.get('password', None)
+        data = request.get_json()
+        username, password = data.get('username', None), data.get('password', None)
 
         if username is None:
             return {"error": "Enter a username"}, 404
@@ -45,7 +46,8 @@ class Login(Resource):
         
 class Signup(Resource):
     def post(self):
-        username, password, password_confirmation = request.get('username', None), request.get('password', None), request.get('password_confirmation', None)
+        data = request.get_json()
+        username, password, password_confirmation = data.get('username', None), data.get('password', None), data.get('password_confirmation', None)
         
         if username is None:
             return {"error": "Enter a username"}, 404
