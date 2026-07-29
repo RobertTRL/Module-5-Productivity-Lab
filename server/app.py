@@ -132,7 +132,8 @@ class Notes(Resource):
         db.session.commit()
 
         return NoteSchema().dump(new_note), 201
-        
+
+    @jwt_required()    
     def put(self, id):
         user_id = int(get_jwt_identity())
 
@@ -160,7 +161,8 @@ class Notes(Resource):
         db.session.commit()
 
         return NoteSchema().dump(specific_note), 200
-        
+
+    @jwt_required()    
     def patch(self, id):
         user_id = int(get_jwt_identity())
         
@@ -189,6 +191,7 @@ class Notes(Resource):
 
         return NoteSchema().dump(specific_note), 200
 
+    @jwt_required()
     def delete(self, id):
         user_id = int(get_jwt_identity())
                 
