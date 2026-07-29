@@ -41,6 +41,15 @@ class User(db.Model):
     def authenticate(self, password):
         return bcrypt.check_password_hash(self._password_hash, password.encode('utf-8'))
 
+    @validates('username')
+    def validate_username_uniqueness(self, key, username):
+        users = User.query.filter(User.username == username).all()
+
+        if users:
+            raise ValueError("Enter a unique username!")
+
+        return username
+    
 class UserSchema(Schema):
     id = fields.Integer(dump_only=True)
     username = fields.String(required=True)
