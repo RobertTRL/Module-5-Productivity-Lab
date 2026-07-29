@@ -11,7 +11,7 @@ User model
     -> username string unique not null
     -> password_hash string not null
 
-Notes model 
+Note model 
     -> id integer
     -> title string not null
     -> content string
@@ -39,7 +39,7 @@ class User(db.Model):
     def authenticate(self, password):
         return bcrypt.check_password_hash(self._password_hash, password.encode('utf-8'))
     
-class Notes(db.Model):
+class Note(db.Model):
     __tablename__ = 'notes'
 
     id = db.Column(db.Integer, primary_key=True)
