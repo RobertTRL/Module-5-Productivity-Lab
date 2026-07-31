@@ -72,6 +72,6 @@ class NoteSchema(Schema):
     id = fields.Integer(dump_only=True)
     title = fields.String(required=True)
     content = fields.String()
-    created_at = fields.Date(required=True)
+    created_at = fields.Date(required=False)
 
     user = fields.Nested(lambda : UserSchema(exclude=('notes',)))
