@@ -43,7 +43,7 @@ class User(db.Model):
 
     @validates('username')
     def validate_username_uniqueness(self, key, username):
-        existing = User.query.filter(User.username == username).all()
+        existing = User.query.filter(User.username == username).first()
 
         if existing and existing.id != self.id:
             raise ValueError("Enter a unique username!")
